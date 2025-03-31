@@ -1,4 +1,6 @@
 package crud.senati;
+
+
 public class CrudSenati {
 
     
