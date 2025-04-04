@@ -3,8 +3,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package crud.senati;
+
 import java.sql.*;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+
 /**
  *
  * @author Alumno-ETI
@@ -18,35 +22,35 @@ public class Usuarios extends javax.swing.JFrame {
         initComponents();
         cargarUsuarios();
     }
-    public void cargarUsuarios(){
+
+    public void cargarUsuarios() {
         System.out.println("cargar usuarios");
         Conexion cn = new Conexion();
         cn.conectar();
-        
+
         String query = "SELECT * FROM usuario";
-        try{
+        try {
             Statement st = null;
             st = cn.conectar().createStatement();
             ResultSet rs = st.executeQuery(query);
-            if(rs != null){
+            if (rs != null) {
                 System.out.println("se cargaron los datos");
             }
             String[] headers = {"ID", "Name", "Lastname"};
-            DefaultTableModel model = new DefaultTableModel(headers,0);
-            
-            while(rs.next()){
-            Object[] row = {
-                rs.getInt("id"),
-                rs.getString("name"),
-                rs.getString("lastname")
-            };
-            model.addRow(row);
+            DefaultTableModel model = new DefaultTableModel(headers, 0);
+
+            while (rs.next()) {
+                Object[] row = {
+                    rs.getInt("id"),
+                    rs.getString("name"),
+                    rs.getString("lastname")
+                };
+                model.addRow(row);
             }
             tblusuarios.setModel(model);
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println(e);
-        
-        
+
         }
     }
 
@@ -68,6 +72,13 @@ public class Usuarios extends javax.swing.JFrame {
         btnclose = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowFocusListener(new java.awt.event.WindowFocusListener() {
+            public void windowGainedFocus(java.awt.event.WindowEvent evt) {
+                formWindowGainedFocus(evt);
+            }
+            public void windowLostFocus(java.awt.event.WindowEvent evt) {
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Swis721 BlkEx BT", 0, 24)); // NOI18N
         jLabel1.setText("FORMULARIO DE USUARIOS");
@@ -86,10 +97,25 @@ public class Usuarios extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tblusuarios);
 
         btnadd.setText("AGREGAR");
+        btnadd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnaddActionPerformed(evt);
+            }
+        });
 
         btnedit.setText("EDITAR");
+        btnedit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btneditActionPerformed(evt);
+            }
+        });
 
         btnremov.setText("ELIMINAR");
+        btnremov.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnremovActionPerformed(evt);
+            }
+        });
 
         btnclose.setText("SALIR");
         btnclose.addActionListener(new java.awt.event.ActionListener() {
@@ -144,12 +170,61 @@ public class Usuarios extends javax.swing.JFrame {
     private void btncloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncloseActionPerformed
         // TODO add your handling code here:
         dispose();
-        
+
     }//GEN-LAST:event_btncloseActionPerformed
 
+    private void btnaddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnaddActionPerformed
+
+        agregarUsuario formadd = new agregarUsuario();
+        formadd.setVisible(true);
+    }//GEN-LAST:event_btnaddActionPerformed
+
+    private void btneditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btneditActionPerformed
+        if (tblusuarios.getSelectedRow() > -1) {
+            TableModel modelo = tblusuarios.getModel();
+            String id = modelo.getValueAt(tblusuarios.getSelectedRow(), 0).toString();
+            String name = modelo.getValueAt(tblusuarios.getSelectedRow(), 1).toString();
+            String lastname = modelo.getValueAt(tblusuarios.getSelectedRow(), 2).toString();
+
+            editarUsuario formUpd = new editarUsuario(id, name, lastname);
+            formUpd.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "selecciona una casilla");
+        }
+    }//GEN-LAST:event_btneditActionPerformed
+
+    private void formWindowGainedFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowGainedFocus
+        cargarUsuarios();
+    }//GEN-LAST:event_formWindowGainedFocus
+
+    private void btnremovActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnremovActionPerformed
+        if (tblusuarios.getSelectedRow() > -1) {
+            if (tblusuarios.getSelectedRow() > -1) {
+                int option = JOptionPane.showConfirmDialog(null, "¿Estas seuro de eliminar?", "eliminar", JOptionPane.OK_OPTION, JOptionPane.CANCEL_OPTION);
+                if (option == 0) {
+                    TableModel modelo = tblusuarios.getModel();
+                    String id = modelo.getValueAt(tblusuarios.getSelectedRow(), 0).toString();
+                    Conexion cn = new Conexion();
+                    String query = "DELETE FROM usuario where id= ?";
+                    try {
+                        PreparedStatement ps = cn.conectar().prepareStatement(query);
+                        ps.setInt(1, Integer.parseInt(id));
+                        ps.execute();
+                        System.out.println("Eliminar");
+                    } catch (SQLException e) {
+                        System.out.println(e);
+                    }
+                }
+
+            } else {
+                JOptionPane.showMessageDialog(null, "selecciona una casilla");
+            }
+        }
+    }//GEN-LAST:event_btnremovActionPerformed
+
     /**
-     * @param args the command line arguments
-     */
+         * @param args the command line arguments
+         */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
