@@ -9,5 +9,10 @@ package Entregable;
  * @author math3
  */
 public class crudFormulario {
-    
+    public static void main(String[] args) {
+        // TODO code application logic here
+         conexion cn = new conexion();
+        cn.conectar();
 }
+        
+    }
