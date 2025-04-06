@@ -154,7 +154,7 @@ public class registro extends javax.swing.JFrame {
 
     private void btnregActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnregActionPerformed
         conexion co = new conexion();
-        String que = "INSERT INTO alumnos(nombre,apellido,grado,seccion,usuario,contraseña)VALUES(?,?,?,?,?,?)";
+        String que = "INSERT INTO profesores(nombre,apellido,grado,seccion,usuario,contraseña)VALUES(?,?,?,?,?,?)";
         String nom = txtname.getText();
         String ape = txtape.getText();
         String grad = txtgra.getText();
