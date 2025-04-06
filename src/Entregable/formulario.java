@@ -147,7 +147,7 @@ public class formulario extends javax.swing.JFrame {
         conexion co = new conexion();
         String usuario = txtusuario.getText();
         String contraseña = txtcontra.getText();
-        String query = "SELECT * FROM alumnos WHERE usuario = ? AND contraseña = ?";
+        String query = "SELECT * FROM profesores WHERE usuario = ? AND contraseña = ?";
         try {
             PreparedStatement st = co.conectar().prepareStatement(query);
             st.setString(1, usuario);
